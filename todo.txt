@@ -1,0 +1,27 @@
+Get to grid automation to do:
+
+1) Factor in Bible study
+
+2) Which get to's does leadership need to do and which ones can they not do?
+
+3) How do we factor in KCrew/high school applicants?
+
+4) How do we factor in 
+	projects
+	assistant DOD
+	activities
+	Head lifeguard
+	sound
+	worship
+	media
+Lump them in with work crew? Or add specific attribute? What get to's do they qualify for?
+
+5) Do boaties have any get to's that we should include?
+
+6) Check requirements for all activities
+
+7) Create main menu with links
+
+8) Put server on cloud
+
+9) Alow for manual upload of staff/schedule
