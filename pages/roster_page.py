@@ -51,12 +51,13 @@ if manual:
     if st.button("Save K-Crew"):
         ss.kcrew = pd.DataFrame(kcrew_temp, columns=["Camp_name"])
 
+# Auto upload
 else: 
     st.write("Please upload roster in the **exact same** format as the one shown below. The order of the columns does not matter, but the names of the columns (case sensitive) do.")
     st.write("Make sure to use **camp names** instead of real names.")
     st.image("roster_example.png")
-    roster_file = st.file_uploader("Upload Roster as excel file (.xlsx)")
-    if roster_file is not None:
+    roster_file = st.file_uploader("Upload Roster as excel file (.xlsx or .csv)", type=['.xlsx', '.csv'])
+    if roster_file is not None and st.button("Submit File"):
         roster = pd.read_excel(roster_file)
         ss.impact = roster["Impact"]
         ss.crew = roster["Crew"]
@@ -76,7 +77,7 @@ with col3:
     st.markdown("**Current Cove**")
     st.dataframe(ss.cove, hide_index=True)
 with col4:
-    st.markdown("**Current Work Crew**")
+    st.markdown("**Current Workcrew**")
     st.dataframe(ss.workcrew, hide_index=True)
 with col5:
     st.markdown("**Current K-Crew**")
