@@ -28,7 +28,18 @@ if 'grid' not in ss:
     ss.grid = None
 if 'week' not in ss:
     ss.week = 0
-
+if 'impact' not in ss:
+    ss.impact = None
+if 'crew' not in ss:
+    ss.crew = None
+if 'cove' not in ss:
+    ss.cove = None
+if 'workcrew' not in ss:
+    ss.workcrew = None
+if 'kcrew' not in ss:
+    ss.kcrew = None
+if 'pstaff' not in ss:
+    ss.pstaff = None
 
 
 def info_page():
@@ -42,14 +53,16 @@ def contact_page():
     st.write("Email (prefered): fletcht13@gmail.com")
     st.write("Phone: 214-949-7274")
     st.write("This application was created by Fletcher Newman in November of 2024 for Pine Cove Bluffs")
+    st.write(ss.impact)
 
 
 pages = {
     'Get To Grid Creator': [
-        st.Page('sched_page.py', title="Edit Grid Schedule"),
-        st.Page('staff_page.py', title="Edit Staff List"),
-        st.Page("createGrid_page.py", title="Create Grid"),
-        st.Page("editGrid_page.py", title="Edit Grid"),
+        st.Page('pages/sched_page.py', title="Edit Grid Schedule"),
+        st.Page('pages/staff_page.py', title="Edit Staff List"),
+        st.Page("pages/roster_page.py", title="Edit Roster"),
+        st.Page("pages/createGrid_page.py", title="Create Grid"),
+        st.Page("pages/editGrid_page.py", title="Edit Grid"),
     ],
     'Information': [
         st.Page(info_page, title= "Instructions"),
