@@ -11,7 +11,7 @@ if not checkpass():
 # Import files and convert columns to bool
 sched = pd.read_excel('getto_format.xlsx')
 staff = pd.read_excel('staff_getto.xlsx')
-staff[['Male', 'Female', 'Lifegaurd', 'Ropes', 'Workcrew', 'OneOnOne', 'Leadership', 'Boatie']] = staff[['Male', 'Female', 'Lifegaurd', 'Ropes', 'Workcrew', 'OneOnOne', 'Leadership', 'Boatie']].astype('bool')
+staff[['Lifegaurd', 'Ropes', 'Leadership', 'Boatie']] = staff[['Lifegaurd', 'Ropes', 'Leadership', 'Boatie']].astype('bool')
 sched[['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']] = sched[['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']].astype(bool)
 sched = sched.fillna('')
 
@@ -40,7 +40,8 @@ if 'kcrew' not in ss:
     ss.kcrew = None
 if 'pstaff' not in ss:
     ss.pstaff = None
-
+if 'ooo' not in ss:
+    ss.ooo = None
 
 def info_page():
     st.title("How to use the get-to grid creator")
@@ -58,11 +59,11 @@ def contact_page():
 
 pages = {
     'Get To Grid Creator': [
-        st.Page('pages/sched_page.py', title="Edit Grid Schedule"),
-        st.Page('pages/staff_page.py', title="Edit Staff List"),
-        st.Page("pages/roster_page.py", title="Edit Roster"),
-        st.Page("pages/createGrid_page.py", title="Create Grid"),
-        st.Page("pages/editGrid_page.py", title="Edit Grid"),
+        st.Page('page_folder/sched_page.py', title="Edit Grid Schedule"),
+        st.Page('page_folder/staff_page.py', title="Edit Staff List"),
+        st.Page("page_folder/roster_page.py", title="Edit Roster"),
+        st.Page("page_folder/createGrid_page.py", title="Create Grid"),
+        st.Page("page_folder/editGrid_page.py", title="Edit Grid"),
     ],
     'Information': [
         st.Page(info_page, title= "Instructions"),

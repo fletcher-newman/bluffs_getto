@@ -83,10 +83,6 @@ def createGrid(sched, staff, week):
     grid['Time'] = times
 
     # Start assignment loop
-    if week < 6:
-        half = 1
-    else: 
-        half = 2
         
     numStaff = len(staff)
     days = {0: 'Sunday', 1: 'Monday', 2: 'Tuesday', 3: 'Wednesday', 4: 'Thursday', 5: 'Friday'}

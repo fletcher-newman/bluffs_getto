@@ -65,6 +65,13 @@ else:
         ss.workcrew = roster["Workcrew"]
         ss.kcrew = roster["Kcrew"]
 
+# One on ones
+st.write("**One on ones**")
+oneonone = st.multiselect("Select who has a one on one (babies or crew/impact)", ss.staff["Camp_name"])
+if st.button("Save One on One"):
+    ss.ooo = pd.DataFrame(oneonone, columns=["Camp_name"])
+
+
 col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
@@ -82,3 +89,6 @@ with col4:
 with col5:
     st.markdown("**Current K-Crew**")
     st.dataframe(ss.kcrew, hide_index=True) 
+
+st.markdown("**Current One on Ones**")
+st.dataframe(ss.ooo, hide_index=True)
