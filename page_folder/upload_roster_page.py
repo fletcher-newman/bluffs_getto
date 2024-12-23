@@ -5,7 +5,9 @@ from streamlit import session_state as ss
 
 def trans_data(roster, program):
     for name in roster[program]:
-        if name not in ss.staff["Camp_name"]:
+        if name == "":
+            continue
+        elif name not in list(ss.staff["Camp_name"]):
             st.error(f"{name} is not in the staff directory.")
         else:
             ss.roster[name] = [program, False]
@@ -17,25 +19,16 @@ st.write("Set the staff roster for the week")
 st.write("Please upload roster in the **exact same** format as the one shown below. The order of the columns does not matter, but the names of the columns (case sensitive) do.")
 st.write("Make sure to use **camp names** instead of real names.")
 st.image("roster_example.png")
+
 roster_file = st.file_uploader("Upload Roster as excel file (.xlsx or .csv)", type=['.xlsx', '.csv'])
+
 if roster_file is not None and st.button("Submit File"):
-    roster = pd.read_excel(roster_file)
+    roster = pd.read_excel(roster_file).fillna("")
     ss.roster = {}  # Resest roster
-    # Impact
-    trans_data(roster, "Impact")
-    # Crew
-    for name in roster['Crew']:
-        ss.roster[name] = ["Crew", False]
-    # Cove
-    for name in roster['Cove']:
-        ss.roster[name] = ["Cove", False]
-    # Workcrew
-    for name in roster['Workcrew']:
-        ss.roster[name] = ["Workcrew", False]
-    # Kcrew
-    for name in roster['Kcrew']:
-        ss.roster[name] = ["Kcrew", False]
-    ss.kcrew = roster["Kcrew"]
+    # Add names to dict
+    programs = ["Impact", "Crew", "Cove", "Workcrew", "Kcrew"]
+    for prog in programs:
+        trans_data(roster, prog)
 
 
 

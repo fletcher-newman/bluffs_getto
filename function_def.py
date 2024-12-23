@@ -47,7 +47,7 @@ def tagsave(save):
 
 
 
-def createGrid(sched, staff, week):
+def createGrid(sched, staff):
     # Create output dataframe
     grid = pd.DataFrame(sched['Activity'])
 
@@ -84,8 +84,9 @@ def createGrid(sched, staff, week):
 
     # Start assignment loop
         
-    numStaff = len(staff)
+    numStaff = len(ss.roster)
     days = {0: 'Sunday', 1: 'Monday', 2: 'Tuesday', 3: 'Wednesday', 4: 'Thursday', 5: 'Friday'}
+    names = list(ss.roster.keys())
 
     for day in days:
         currDay = days[day]
@@ -94,13 +95,15 @@ def createGrid(sched, staff, week):
         for i in range(len(sched)):
             # Check if activity is scheduled that day
             if sched[currDay][i]:
-                index = np.random.randint(0, len(staff))    # Sets random index to start checking staff 
+                index = np.random.randint(0, numStaff)    # Sets random index to start checking staff 
                 repeat = 0
                 found = False
                 noneFound = False
 
                 # Loop through staff to see who can do it
                 while not found:
+                    name = names[index]
+                    nameData = staff.query('Camp_name == @name')
                     repeat += 1
 
                     # If search finds no one avaible
@@ -109,16 +112,16 @@ def createGrid(sched, staff, week):
                         found = True
                         continue
 
-                    # Check if correct half
-                    if staff['Half'][index] not in [half, 3]:
-                        index = (index + 1) % numStaff
-                        continue
-
                     # Check if they have been scheduled recently (1 hour buffer between when they get off and when they can start again)
-                    if staff['prevDay'][index] == day:
-                        if staff['prevTime'][index] + 1 > sched['Start'][i]:
+                    if nameData['prevDay'][nameData.index[0]] == day:
+                        if nameData['prevTime'][nameData.index[0]] + 1 > sched['Start'][i]:
                             index = (index + 1) % numStaff
                             continue
+
+                    # Check if they have a 1on1 or are Kcrew
+                    if ss.roster[name][1] or ss.roster[name][0] == "Kcrew":
+                        index = (index + 1) % numStaff
+                        continue
 
                     # Check if they meet the requirements
                     req = sched['Require'][i].split(',')
@@ -126,7 +129,16 @@ def createGrid(sched, staff, week):
                         metReq = True
                         for crit in req:
                             crit = crit.strip()
-                            if not staff[crit][index]:
+                            # Must check the roster dict to see if they are workcrew
+                            if crit == "Workcrew":
+                                if ss.roster[name][0] != "Workcrew":
+                                    metReq = False
+                                    break
+                            elif crit in ["Male", "Female"]:
+                                if nameData['Gender'][nameData.index[0]] != crit:
+                                    metReq = False
+                                    break
+                            elif not nameData[crit][nameData.index[0]]:
                                 metReq = False
                                 break
                         if not metReq:
@@ -142,9 +154,9 @@ def createGrid(sched, staff, week):
 
                 # add staff to list and update their recent time attributes 
                 else:
-                    dayList.append(staff['Camp_name'][index])
-                    staff.loc[index, 'prevDay'] = day
-                    staff.loc[index, 'prevTime'] = sched['End'][i]
+                    dayList.append(name)
+                    staff.loc[nameData.index[0], 'prevDay'] = day
+                    staff.loc[nameData.index[0], 'prevTime'] = sched['End'][i]
 
             else:
                 dayList.append('')

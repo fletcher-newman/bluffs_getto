@@ -66,11 +66,13 @@ pages = {
         st.Page("page_folder/manual_roster_page.py", title="Manual Input"),
         st.Page("page_folder/upload_roster_page.py", title="File Upload")
     ],
-    'Get To Grid Creator': [
+    'Edit Full Summer Data': [
         st.Page('page_folder/sched_page.py', title="Edit Grid Schedule"),
         st.Page('page_folder/staff_page.py', title="Edit Staff List"),
-        st.Page("page_folder/createGrid_page.py", title="Create Grid"),
         st.Page("page_folder/editGrid_page.py", title="Edit Grid"),
+    ],
+    'Get To Grid Creator': [
+        st.Page("page_folder/createGrid_page.py", title="Create Grid")
     ],
     'Information': [
         st.Page(info_page, title= "Instructions"),
