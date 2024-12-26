@@ -67,7 +67,8 @@ pages = {
     ],
     'Information': [
         st.Page(info_page, title= "Instructions"),
-        st.Page(contact_page, title="Contact")
+        st.Page(contact_page, title="Contact"),
+        st.Page("page_folder/formats_page.py", title="Download Formats")
 
     ]
 }
