@@ -167,3 +167,23 @@ def createGrid(sched, staff):
     staff['prevDay'] = np.zeros(len(staff['prevDay'])).astype(int)
     staff['prevTime'] = np.zeros(len(staff['prevTime'])).astype(int)
     return grid
+
+
+def trans_kcrew(kcrew_df):
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    shifts = ["AM'er", "Aftie", "Wickie", "O'fer"]
+    for day in days:
+        shift = ""
+        dayList = list(kcrew_df[day])
+        for i in range(len(dayList)):
+            if dayList[i] in shifts:
+                shift = dayList[i]
+                continue
+            elif dayList[i] not in list(ss.staff["Camp_name"]):
+                st.error(f"{dayList[i]} is not in the staff directory")
+                continue
+            else:
+                if dayList[i] not in ss.kcrew:
+                    ss.kcrew[dayList[i]] = {}
+                ss.kcrew[dayList[i]][day] = shift
+        

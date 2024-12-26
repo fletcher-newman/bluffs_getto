@@ -32,20 +32,10 @@ if 'roster' not in ss:
     # Roster is dictionary with camp name as key and a list of which program they are in and bool if they have a one on one.
     # {CampName: [Program, OneOnOne?(T/F)]}
     ss.roster = {}
-# if 'impact' not in ss:
-#     ss.impact = None
-# if 'crew' not in ss:
-#     ss.crew = None
-# if 'cove' not in ss:
-#     ss.cove = None
-# if 'workcrew' not in ss:
-#     ss.workcrew = None
-# if 'kcrew' not in ss:
-#     ss.kcrew = None
-# if 'pstaff' not in ss:
-#     ss.pstaff = None
-# if 'ooo' not in ss:
-#     ss.ooo = None
+if 'kcrew' not in ss:
+    # kcrew is nested dict with campname as outer key and day as inner key and what their assignment was (am'er, afttie, wickie, o'fer) for that day
+    # Only one assignment per person per day
+    ss.kcrew = {}
 
 def info_page():
     st.title("How to use the get-to grid creator")
@@ -63,8 +53,9 @@ def contact_page():
 
 pages = {
     'Edit Weekly Staff Roster': [
-        st.Page("page_folder/manual_roster_page.py", title="Manual Input"),
-        st.Page("page_folder/upload_roster_page.py", title="File Upload")
+        st.Page("page_folder/weekly_edits/manual_roster_page.py", title="Manual Input"),
+        st.Page("page_folder/weekly_edits/upload_roster_page.py", title="File Upload"),
+        st.Page("page_folder/weekly_edits/kcrew_page.py", title="K-crew Schedule Upload")
     ],
     'Edit Full Summer Data': [
         st.Page('page_folder/sched_page.py', title="Edit Grid Schedule"),
