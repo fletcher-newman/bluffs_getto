@@ -14,6 +14,8 @@ if kcrew_file is not None and st.button("Submit File"):
     st.dataframe(kcrew_df)
     # Add names to dict
     trans_kcrew(kcrew_df)
+    for name in ss.kcrew:
+        ss.roster[name] = ["Kcrew", False]
 
 
 

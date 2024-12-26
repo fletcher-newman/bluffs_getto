@@ -12,7 +12,7 @@ def trans_data(roster, program):
         else:
             ss.roster[name] = [program, False]
 
-st.title("Upload Set Roster")
+st.title("Upload Roster")
 st.write("Set the staff roster for the week")
 
 
@@ -26,7 +26,7 @@ if roster_file is not None and st.button("Submit File"):
     roster = pd.read_excel(roster_file).fillna("")
     ss.roster = {}  # Resest roster
     # Add names to dict
-    programs = ["Impact", "Crew", "Cove", "Workcrew", "Kcrew"]
+    programs = ["Impact", "Crew", "Cove", "Workcrew"]
     for prog in programs:
         trans_data(roster, prog)
 

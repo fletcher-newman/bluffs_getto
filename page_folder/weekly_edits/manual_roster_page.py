@@ -71,20 +71,6 @@ if st.button("Save Work Crew"):
 
 
 
-#kcrew
-kcrew_temp = st.multiselect("**K-Crew:**", ss["staff"]["Camp_name"])
-for name in kcrew_temp:
-    st.write(name)
-
-if st.button("Save K-Crew"):
-    # Delete Current kcrew
-    ss.roster = {campName: valList for campName, valList in ss.roster.items() if valList[0] != "Kcrew"}
-    # Add new kcrew
-    for name in kcrew_temp:
-        ss.roster[name] = ["Kcrew", False]
-
-
-
 # One on ones
 st.write("**One on ones**")
 oneonone = st.multiselect("Select who has a one on one (babies or crew/impact)", ss.staff["Camp_name"])

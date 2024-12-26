@@ -21,7 +21,7 @@ if st.button('Save Changes'):
 
 # Schedule upload section 
 st.title("Upload new schedule")
-st.write("**Example formatts can be downloaded in the formatts section**")
+st.page_link("page_folder/formats_page.py", label="**Example formatts can be downloaded in the formatts section** (link)")
 st.write("Follow the **exact** same formatting as in the image below. All time must me in military time with no ':' characters.")
 st.write("Make sure everything is spelled correctly and that there are no extra spaces around the column names")
 st.write("To indicate if an activity happens on a certain day, that cell is marked with a 1 for TRUE and a 0 for FALSE (activity does not happen that day)")
