@@ -142,30 +142,35 @@ def createGrid(sched, staff):
 
                     # Check if they meet the requirements
                     req = sched['Require'][i].split(',')
-                    for i in range(len(req)):
-                        req[i] = req[i].strip()
+                    for w in range(len(req)):
+                        req[w] = req[w].strip()
 
                     # Check if leadership can be skipped
-                    if "Leadership" not in req and ss.roster[name] == "Leadership":
+                    if ("Leadership" not in req) and ss.roster[name][0] == "Leadership":
                         index = (index + 1) % numStaff
                         continue
                     
-                    if '' not in req:
-                        metReq = True
-                        for crit in req:
-                            # Must check the roster dict to see if they are workcrew
-                            if crit == "Non-program" and ss.roster[name][0] in ["Impact", "Crew", "Cove"]:
-                                metReq = False
-                                break
-                            elif crit in ["Male", "Female"] and nameData['Gender'][nameData.index[0]] != crit:
-                                metReq = False
-                                break
-                            elif crit == "Leadership" and ss.roster[name][0] != "Leadership":
-                                metReq = False
-                                break
-                        if not metReq:
-                            index = (index + 1) % numStaff
-                            continue
+                    metReq = True
+                    for crit in req:
+                        # Must check the roster dict to see if they are workcrew
+                        if crit == "Non-program" and ss.roster[name][0] in ["Impact", "Crew", "Cove"]:
+                            metReq = False
+                            break
+                        # Check gender
+                        elif crit in ["Male", "Female"] and nameData['Gender'][nameData.index[0]] != crit:
+                            metReq = False
+                            break
+                        # Check leadership
+                        elif (crit == "Leadership") and (ss.roster[name][0] != "Leadership"):
+                            metReq = False
+                            break
+                        # Check certification 
+                        elif crit in ["Ropes", "Lifeguard"] and not nameData[crit][nameData.index[0]]:
+                            metReq = False
+                            break
+                    if not metReq:
+                        index = (index + 1) % numStaff
+                        continue
 
                     # Check if they have any tags that make them ineligable
                     # Still need to check sound/projects and media
@@ -186,7 +191,7 @@ def createGrid(sched, staff):
 
                 # add staff to list and update their recent time attributes 
                 else:
-                    dayList.append(name)
+                    dayList.append(name + " " + str(ss.roster[name][0]) + " Lifeguard:" + str(nameData["Lifeguard"][nameData.index[0]]) + " Ropes:" + str(nameData["Ropes"][nameData.index[0]]))
                     staff.loc[nameData.index[0], 'prevDay'] = day
                     staff.loc[nameData.index[0], 'prevTime'] = sched['End'][i]
 

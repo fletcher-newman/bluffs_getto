@@ -12,13 +12,13 @@ if not checkpass():
 
 #put global variables in the session state
 if 'sched' not in ss:
-    sched = pd.read_excel('getto_format.xlsx')
+    sched = pd.read_excel('permanent_data/get_to_schedule.xlsx')
     sched[['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']] = sched[['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']].astype(bool)
     sched = sched.fillna('')
     ss.sched = sched
 if 'staff' not in ss:
-    staff = pd.read_excel('staff_getto.xlsx')
-    staff[['Lifegaurd', 'Ropes']] = staff[['Lifegaurd', 'Ropes']].astype('bool')
+    staff = pd.read_excel('permanent_data/staff_directory.xlsx')
+    staff[['Lifeguard', 'Ropes']] = staff[['Lifeguard', 'Ropes']].astype('bool')
     staff = staff.fillna("")
     ss.staff = staff
 if 'bsave_tag' not in ss:

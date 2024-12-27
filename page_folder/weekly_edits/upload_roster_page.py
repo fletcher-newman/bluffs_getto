@@ -62,7 +62,7 @@ col1, col2, col3, col4, col5 = st.columns(5)
 with col1:
     st.markdown("**Current Impact**")
     for name in ss.roster:
-        if ss.roster[name][0]== "Impact":
+        if ss.roster[name][0] == "Impact":
             if ss.roster[name][1]:
                 st.write(name, " (1on1)")
             else: 
@@ -71,7 +71,7 @@ with col1:
 with col2:
     st.markdown("**Current Crew**")
     for name in ss.roster:
-        if ss.roster[name][0]== "Crew":
+        if ss.roster[name][0] == "Crew":
             if ss.roster[name][1]:
                 st.write(name, " (1on1)")
             else: 
@@ -80,7 +80,7 @@ with col2:
 with col3:
     st.markdown("**Current Cove**")
     for name in ss.roster:
-        if ss.roster[name][0]== "Cove":
+        if ss.roster[name][0] == "Cove":
             if ss.roster[name][1]:
                 st.write(name, " (1on1)")
             else: 
@@ -89,7 +89,7 @@ with col3:
 with col4:
     st.markdown("**Current Workcrew**")
     for name in ss.roster:
-        if ss.roster[name][0]== "Workcrew":
+        if ss.roster[name][0] == "Workcrew":
             if ss.roster[name][1]:
                 st.write(name, " (1on1)")
             else: 
@@ -98,7 +98,7 @@ with col4:
 with col5:
     st.markdown("**Current K-Crew**")
     for name in ss.roster:
-        if ss.roster[name][0]== "Kcrew":
+        if ss.roster[name][0] == "Kcrew":
             if ss.roster[name][1]:
                 st.write(name, " (1on1)")
             else: 
@@ -106,5 +106,5 @@ with col5:
 
 st.markdown("**Current Leadership**")
 for name in ss.roster:
-    if ss.roster[name][0]== "Leadership":
+    if ss.roster[name][0] == "Leadership":
         st.write(name)

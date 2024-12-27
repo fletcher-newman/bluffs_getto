@@ -13,5 +13,5 @@ if st.button('Save Changes'):
         st.error('No new changes were made')
     else:
         ss['staff'] = new_staff
-        new_staff.to_excel('staff_getto.xlsx', index=False)
+        new_staff.to_excel('permanent_data/staff_directory.xlsx', index=False)
         st.success("Staff changes saved!")
