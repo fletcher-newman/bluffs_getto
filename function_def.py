@@ -6,6 +6,8 @@ from io import BytesIO
 import hmac
 
 
+
+
 def checkpass():
     """Asks for password input and returns false if password is incorect"""
     def password_entered():
@@ -50,6 +52,9 @@ def tagsave(save):
 def createGrid(sched, staff):
     # Create output dataframe
     grid = pd.DataFrame(sched['Activity'])
+
+    staff["prevTime"] = 0
+    staff["prevDay"] = 0
 
     # Create time list
     times = []
@@ -118,32 +123,59 @@ def createGrid(sched, staff):
                             index = (index + 1) % numStaff
                             continue
 
-                    # Check if they have a 1on1 or are Kcrew
-                    if ss.roster[name][1] or ss.roster[name][0] == "Kcrew":
+                    # If they are kcrew, check if they have a shift durring that time (ignore if it is sunday)
+                    # ASSUMING AM'ER: 600-1200 (6am-12pm), AFTIE: 1330-1800 (1:30pm-6:00pm)
+                    if name in ss.kcrew and day != 0:
+                        # Check morning 
+                        if ss.kcrew[name] == "AM'er" and sched["Start"][i] < 1300:
+                            index = (index + 1) % numStaff
+                            continue
+                        elif ss.kcrew[name] == "Aftie" and ((sched["Start"] > 1300 and sched["Start"] < 1830) or (sched["End"] > 1300 and sched["End"] < 1830)):
+                            index = (index + 1) % numStaff
+                            continue
+                            
+
+                    # Check if they have a 1on1
+                    if ss.roster[name][1]:
                         index = (index + 1) % numStaff
                         continue
 
                     # Check if they meet the requirements
                     req = sched['Require'][i].split(',')
+                    for i in range(len(req)):
+                        req[i] = req[i].strip()
+
+                    # Check if leadership can be skipped
+                    if "Leadership" not in req and ss.roster[name] == "Leadership":
+                        index = (index + 1) % numStaff
+                        continue
+                    
                     if '' not in req:
                         metReq = True
                         for crit in req:
-                            crit = crit.strip()
                             # Must check the roster dict to see if they are workcrew
-                            if crit == "Workcrew":
-                                if ss.roster[name][0] != "Workcrew":
-                                    metReq = False
-                                    break
-                            elif crit in ["Male", "Female"]:
-                                if nameData['Gender'][nameData.index[0]] != crit:
-                                    metReq = False
-                                    break
-                            elif not nameData[crit][nameData.index[0]]:
+                            if crit == "Non-program" and ss.roster[name][0] in ["Impact", "Crew", "Cove"]:
+                                metReq = False
+                                break
+                            elif crit in ["Male", "Female"] and nameData['Gender'][nameData.index[0]] != crit:
+                                metReq = False
+                                break
+                            elif crit == "Leadership" and ss.roster[name][0] != "Leadership":
                                 metReq = False
                                 break
                         if not metReq:
                             index = (index + 1) % numStaff
                             continue
+
+                    # Check if they have any tags that make them ineligable
+                    # Still need to check sound/projects and media
+                    if "Leadership" not in req or ss.roster[name][0] not in ["Impact", "Crew", "Cove"]:
+                        tag = nameData["Tag"][nameData.index[0]].strip()
+                        if tag in ["Health Assistant", "Head Lifeguard", "Camp Store"]:
+                            index = (index + 1) % numStaff
+                            continue
+                            
+
 
                     # Passed all requirements, this is the one
                     found = True
@@ -164,8 +196,8 @@ def createGrid(sched, staff):
         grid[currDay] = dayList  
 
     # Reset 
-    staff['prevDay'] = np.zeros(len(staff['prevDay'])).astype(int)
-    staff['prevTime'] = np.zeros(len(staff['prevTime'])).astype(int)
+    del staff['prevDay'] 
+    del staff['prevTime'] 
     return grid
 
 

@@ -8,20 +8,19 @@ if not checkpass():
     st.stop()
 
 
-# Import files and convert columns to bool
-sched = pd.read_excel('getto_format.xlsx')
-staff = pd.read_excel('staff_getto.xlsx')
-staff[['Lifegaurd', 'Ropes', 'Leadership', 'Boatie']] = staff[['Lifegaurd', 'Ropes', 'Leadership', 'Boatie']].astype('bool')
-sched[['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']] = sched[['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']].astype(bool)
-sched = sched.fillna('')
-
 
 
 #put global variables in the session state
 if 'sched' not in ss:
+    sched = pd.read_excel('getto_format.xlsx')
+    sched[['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']] = sched[['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']].astype(bool)
+    sched = sched.fillna('')
     ss.sched = sched
 if 'staff' not in ss:
-    ss['staff'] = staff
+    staff = pd.read_excel('staff_getto.xlsx')
+    staff[['Lifegaurd', 'Ropes']] = staff[['Lifegaurd', 'Ropes']].astype('bool')
+    staff = staff.fillna("")
+    ss.staff = staff
 if 'bsave_tag' not in ss:
     ss.bsave_tag = False
 if 'grid' not in ss:
@@ -31,7 +30,9 @@ if 'week' not in ss:
 if 'roster' not in ss:
     # Roster is dictionary with camp name as key and a list of which program they are in and bool if they have a one on one.
     # {CampName: [Program, OneOnOne?(T/F)]}
-    ss.roster = {}
+    # Go ahead and put in leadership
+    leadership_df = ss.staff[ss.staff["Tag"] == "Leadership"]
+    ss.roster = {row["Camp_name"]: ["Leadership", False] for _, row in leadership_df.iterrows()}
 if 'kcrew' not in ss:
     # kcrew is nested dict with campname as outer key and day as inner key and what their assignment was (am'er, afttie, wickie, o'fer) for that day
     # Only one assignment per person per day

@@ -24,11 +24,19 @@ roster_file = st.file_uploader("Upload Roster as excel file (.xlsx or .csv)", ty
 
 if roster_file is not None and st.button("Submit File"):
     roster = pd.read_excel(roster_file).fillna("")
-    ss.roster = {}  # Resest roster
+    # Reset roster
+    nameList = []
+    for name in ss.roster:
+        if ss.roster[name][0] in ["Impact", "Crew", "Cove", "Workcrew", "P-Staff"]:
+            nameList.append(name)
+    for name in nameList:
+        del ss.roster[name]
+
     # Add names to dict
-    programs = ["Impact", "Crew", "Cove", "Workcrew"]
+    programs = ["Impact", "Crew", "Cove", "Workcrew", "P-Staff"]
     for prog in programs:
         trans_data(roster, prog)
+    st.success("File successfuly submitted")
 
 
 
@@ -95,3 +103,8 @@ with col5:
                 st.write(name, " (1on1)")
             else: 
                 st.write(name)
+
+st.markdown("**Current Leadership**")
+for name in ss.roster:
+    if ss.roster[name][0]== "Leadership":
+        st.write(name)
