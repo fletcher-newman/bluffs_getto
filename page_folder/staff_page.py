@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit import session_state as ss
 import pandas as pd
+from function_def import trans_data, find_bstud
 
 st.title("Staff List")
 st.write('Be sure to click "Save Changes" once you are done making changes.')
@@ -13,7 +14,26 @@ if st.button('Save Changes'):
     if new_staff.equals(ss['staff']):
         st.error('No new changes were made')
     else:
-        ss['staff'] = new_staff
+        ss.staff = new_staff
+        # Redo roster
+        ss.roster = {}
+        # Add names to dict
+        roster_df = pd.read_excel('permanent_data/roster.xlsx').fillna("")
+        programs = ["Impact", "Crew", "Cove", "Workcrew", "P-Staff"]
+        for prog in programs:
+            trans_data(roster_df, prog)
+        # Add leadership
+        leadership_df = ss.staff[ss.staff["Tag"] == "Leadership"]
+        for _, row in leadership_df.iterrows():
+            day, time = find_bstud(row["Camp_name"])
+            ss.roster[row["Camp_name"]] = {"Role": "Leadership", "OneOnOne": False, "Bstud_day": day, "Bstud_time": time}
+        # ss.roster = {row["Camp_name"]: {"role": "Leadership", "OneOnOne": False, "bstud_day": find_bstud(row["Camp_name"])[0], "bstud_time": find_bstud(row["Camp_name"])[1]} for _, row in leadership_df.iterrows()}
+        # Add Kcrew
+        # Add to dict and find bstud time
+        for name in ss.kcrew:
+            day, time = find_bstud(name)
+            ss.roster[name] = {"Role": "Kcrew", "OneOnOne": False, "Bstud_day": day, "Bstud_time": time}
+
         new_staff.to_excel('permanent_data/staff_directory.xlsx', index=False)
         st.success("Staff changes saved!")
 

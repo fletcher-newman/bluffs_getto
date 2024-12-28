@@ -47,3 +47,4 @@ if week in weeks:
 
 
 
+st.write(ss.roster)
