@@ -136,7 +136,7 @@ def createGrid(sched, staff):
                             
 
                     # Check if they have a 1on1
-                    if ss.roster[name][1]:
+                    if ss.roster[name]["OneOnOne"]:
                         index = (index + 1) % numStaff
                         continue
 
@@ -146,14 +146,14 @@ def createGrid(sched, staff):
                         req[w] = req[w].strip()
 
                     # Check if leadership can be skipped
-                    if ("Leadership" not in req) and ss.roster[name][0] == "Leadership":
+                    if ("Leadership" not in req) and ss.roster[name]["Role"] == "Leadership":
                         index = (index + 1) % numStaff
                         continue
                     
                     metReq = True
                     for crit in req:
                         # Must check the roster dict to see if they are workcrew
-                        if crit == "Non-program" and ss.roster[name][0] in ["Impact", "Crew", "Cove"]:
+                        if crit == "Non-program" and ss.roster[name]["Role"] in ["Impact", "Crew", "Cove"]:
                             metReq = False
                             break
                         # Check gender
@@ -161,7 +161,7 @@ def createGrid(sched, staff):
                             metReq = False
                             break
                         # Check leadership
-                        elif (crit == "Leadership") and (ss.roster[name][0] != "Leadership"):
+                        elif (crit == "Leadership") and (ss.roster[name]["Role"] != "Leadership"):
                             metReq = False
                             break
                         # Check certification 
@@ -174,7 +174,7 @@ def createGrid(sched, staff):
 
                     # Check if they have any tags that make them ineligable
                     # Still need to check sound/projects and media
-                    if "Leadership" not in req or ss.roster[name][0] not in ["Impact", "Crew", "Cove"]:
+                    if "Leadership" not in req or ss.roster[name]["Role"] not in ["Impact", "Crew", "Cove"]:
                         tag = nameData["Tag"][nameData.index[0]].strip()
                         if tag in ["Health Assistant", "Head Lifeguard", "Camp Store"]:
                             index = (index + 1) % numStaff
@@ -191,7 +191,7 @@ def createGrid(sched, staff):
 
                 # add staff to list and update their recent time attributes 
                 else:
-                    dayList.append(name + " " + str(ss.roster[name][0]) + " Lifeguard:" + str(nameData["Lifeguard"][nameData.index[0]]) + " Ropes:" + str(nameData["Ropes"][nameData.index[0]]))
+                    dayList.append(name + " " + str(ss.roster[name]["Role"]) + " Lifeguard:" + str(nameData["Lifeguard"][nameData.index[0]]) + " Ropes:" + str(nameData["Ropes"][nameData.index[0]]))
                     staff.loc[nameData.index[0], 'prevDay'] = day
                     staff.loc[nameData.index[0], 'prevTime'] = sched['End'][i]
 
@@ -224,3 +224,17 @@ def trans_kcrew(kcrew_df):
                     ss.kcrew[dayList[i]] = {}
                 ss.kcrew[dayList[i]][day] = shift
         
+
+def find_bstud(camp_name):
+    """
+    Returns tuple (day (str), start_time (int)) of bstud
+    If no bstud found, returns ("", 0)
+    """
+    day = ""
+    time = 0
+    for dayTime in list(ss.bstud.columns):
+        if camp_name in ss.bstud[dayTime].values:
+            splt = dayTime.split(" ")
+            day = splt[0].strip()
+            time = int(splt[1].strip())
+    return day, time

@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 from streamlit import session_state as ss
-from function_def import checkpass
+from function_def import checkpass, find_bstud
 
 #Checks for correct password before continuing to the rest of the app
 if not checkpass():
@@ -28,18 +28,27 @@ if 'grid' not in ss:
 if 'week' not in ss:
     ss.week = 0
 if 'roster' not in ss:
-    # Roster is dictionary with camp name as key and a list of which program they are in and bool if they have a one on one.
-    # {CampName: [Program, OneOnOne?(T/F)]}
+    # Roster is a nested dictionary:
+    # {CampName: {"role": name of role, "OneOnOne": T/F, "bstud_day": "Monday/Tuesday/etc.", "bstud_time": time of bstud (int)}
     # Go ahead and put in leadership
     leadership_df = ss.staff[ss.staff["Tag"] == "Leadership"]
-    ss.roster = {row["Camp_name"]: ["Leadership", False] for _, row in leadership_df.iterrows()}
+    for _, row in leadership_df.iterrows():
+        day, time = find_bstud(row["Camp_name"])
+        ss.roster[row["Camp_name"]] = {"Role": "Leadership", "OneOnOne": False, "Bstud_day": day, "Bstud_time": time}
+    # ss.roster = {row["Camp_name"]: {"role": "Leadership", "OneOnOne": False, "bstud_day": find_bstud(row["Camp_name"])[0], "bstud_time": find_bstud(row["Camp_name"])[1]} for _, row in leadership_df.iterrows()}
 if 'kcrew' not in ss:
     # kcrew is nested dict with campname as outer key and day as inner key and what their assignment was (am'er, afttie, wickie, o'fer) for that day
     # Only one assignment per person per day
     ss.kcrew = {}
+if "bstud" not in ss:
+    bstud = pd.read_excel('permanent_data/bstud_list.xlsx')
+    ss.bstud = bstud
 
 def info_page():
     st.title("How to use the get-to grid creator")
+    st.write("Under construction")
+    st.title("Assumptions of the Get-to grid algorithm")
+    st.write("-All bible studies run for 1 hour")
 
 
 def contact_page():
@@ -54,7 +63,6 @@ def contact_page():
 
 pages = {
     'Edit Weekly Staff Roster': [
-        st.Page("page_folder/weekly_edits/manual_roster_page.py", title="Manual Input"),
         st.Page("page_folder/weekly_edits/upload_roster_page.py", title="File Upload"),
         st.Page("page_folder/weekly_edits/kcrew_page.py", title="K-crew Schedule Upload")
     ],

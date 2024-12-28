@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from streamlit import session_state as ss
+from function_def import find_bstud
 
 def trans_data(roster, program):
     for name in roster[program]:
@@ -10,7 +11,8 @@ def trans_data(roster, program):
         elif name not in list(ss.staff["Camp_name"]):
             st.error(f"{name} is not in the staff directory.")
         else:
-            ss.roster[name] = [program, False]
+            day, time = find_bstud(name)
+            ss.roster[name] = {"Role": program, "OneOnOne": False, "Bstud_day": day, "Bstud_time": time}
 
 st.title("Upload Roster")
 st.write("Set the staff roster for the week")
@@ -27,7 +29,7 @@ if roster_file is not None and st.button("Submit File"):
     # Reset roster
     nameList = []
     for name in ss.roster:
-        if ss.roster[name][0] in ["Impact", "Crew", "Cove", "Workcrew", "P-Staff"]:
+        if ss.roster[name]["Role"] in ["Impact", "Crew", "Cove", "Workcrew", "P-Staff"]:
             nameList.append(name)
     for name in nameList:
         del ss.roster[name]
@@ -46,15 +48,15 @@ oneonone = st.multiselect("Select who has a one on one (babies or crew/impact)",
 if st.button("Save One on One"):
     # Reset 1on1
     for name in ss.roster:
-        if ss.roster[name][1] == True:
-            ss.roster[name][1] = False
+        if ss.roster[name]["OneOnOne"] == True:
+            ss.roster[name]["OneOnOne"] = False
     # Assign 1on1
     for name in oneonone:
         # Check if name is in dict
         if name not in ss.roster:
             st.error(f"{name} is not listed in this weeks roster")
             continue
-        ss.roster[name][1] = True
+        ss.roster[name]["OneOnOne"] = True
 
 
 col1, col2, col3, col4, col5 = st.columns(5)
@@ -62,8 +64,8 @@ col1, col2, col3, col4, col5 = st.columns(5)
 with col1:
     st.markdown("**Current Impact**")
     for name in ss.roster:
-        if ss.roster[name][0] == "Impact":
-            if ss.roster[name][1]:
+        if ss.roster[name]["Role"] == "Impact":
+            if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
                 st.write(name)
@@ -71,8 +73,8 @@ with col1:
 with col2:
     st.markdown("**Current Crew**")
     for name in ss.roster:
-        if ss.roster[name][0] == "Crew":
-            if ss.roster[name][1]:
+        if ss.roster[name]["Role"] == "Crew":
+            if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
                 st.write(name)
@@ -80,8 +82,8 @@ with col2:
 with col3:
     st.markdown("**Current Cove**")
     for name in ss.roster:
-        if ss.roster[name][0] == "Cove":
-            if ss.roster[name][1]:
+        if ss.roster[name]["Role"] == "Cove":
+            if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
                 st.write(name)
@@ -89,8 +91,8 @@ with col3:
 with col4:
     st.markdown("**Current Workcrew**")
     for name in ss.roster:
-        if ss.roster[name][0] == "Workcrew":
-            if ss.roster[name][1]:
+        if ss.roster[name]["Role"] == "Workcrew":
+            if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
                 st.write(name)
@@ -98,13 +100,13 @@ with col4:
 with col5:
     st.markdown("**Current K-Crew**")
     for name in ss.roster:
-        if ss.roster[name][0] == "Kcrew":
-            if ss.roster[name][1]:
+        if ss.roster[name]["Role"] == "Kcrew":
+            if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
                 st.write(name)
 
 st.markdown("**Current Leadership**")
 for name in ss.roster:
-    if ss.roster[name][0] == "Leadership":
+    if ss.roster[name]["Role"] == "Leadership":
         st.write(name)

@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from streamlit import session_state as ss
-from function_def import trans_kcrew
+from function_def import trans_kcrew, find_bstud
 
 st.title("K-crew Schedule Upload")
 
@@ -14,8 +14,10 @@ if kcrew_file is not None and st.button("Submit File"):
     st.dataframe(kcrew_df)
     # Add names to dict
     trans_kcrew(kcrew_df)
+    # Add to dict and find bstud time
     for name in ss.kcrew:
-        ss.roster[name] = ["Kcrew", False]
+        day, time = find_bstud(name)
+        ss.roster[name] = {"Role": "Kcrew", "OneOnOne": False, "Bstud_day": day, "Bstud_time": time}
     st.success("File Uploaded Successfuly")
 
 
