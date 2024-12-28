@@ -89,7 +89,7 @@ pages = {
     'Edit Full Summer Data': [
         st.Page('page_folder/sched_page.py', title="Edit Grid Schedule"),
         st.Page('page_folder/staff_page.py', title="Edit Staff List"),
-        st.Page("page_folder/editGrid_page.py", title="Edit Grid"),
+        st.Page("page_folder/editGrid_page.py", title="Download/Edit Grid"),
         st.Page("page_folder/bstud_page.py", title="Edit Bible Study List")
     ],
     'Get To Grid Creator': [
