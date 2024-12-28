@@ -67,6 +67,8 @@ def info_page():
     st.write("Under construction")
     st.title("Assumptions of the Get-to grid algorithm")
     st.write("-All bible studies run for 1 hour")
+    st.write("-K-Crew shifts are: AM'er (6am-12pm), Aftie (1:30-6), Wickie (Workcrew day), and O'fer (off day, but not for get-to's)")
+    st.write("-There is a 1 hour grace period for a staffer after the end of a get-to (cannot be scheduled durring that time)")
 
 
 def contact_page():

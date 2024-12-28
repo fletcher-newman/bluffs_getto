@@ -70,6 +70,23 @@ with open(kcrew_path, "rb") as file:
 st.download_button(
     label="Download K-crew File",
     data=kcrew_data,
-    file_name="roster_format.xlsx",
+    file_name="kcrew_format.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
+
+st.write(" ")
+
+# BSTUD FORMAT
+st.write("**Bible Study Format**")
+st.image("images/bstud_example.png")
+bstud_path = "formats/bstud_format_download.xlsx"
+# Read the Excel file in binary mode
+with open(bstud_path, "rb") as file:
+    bstud_data = file.read()
+# Create the download button
+st.download_button(
+    label="Download Bible Study File",
+    data=bstud_data,
+    file_name="bstud_format.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )

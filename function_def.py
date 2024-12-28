@@ -116,10 +116,23 @@ def createGrid(sched, staff):
                         noneFound = True
                         found = True
                         continue
+                    
+                    # Extract requirements
+                    req = sched['Require'][i].split(',')
+                    for w in range(len(req)):
+                        req[w] = req[w].strip()
+                        
+                    # Check if they have any tags that make them ineligable
+                    # Still need to check sound/projects and media
+                    if "Leadership" not in req or ss.roster[name]["Role"] not in ["Impact", "Crew", "Cove"]:
+                        tag = nameData["Tag"][nameData.index[0]].strip()
+                        if tag in ["Health Assistant", "Head Lifeguard", "Camp Store"]:
+                            index = (index + 1) % numStaff
+                            continue
 
                     # Check if they have been scheduled recently (1 hour buffer between when they get off and when they can start again)
                     if nameData['prevDay'][nameData.index[0]] == day:
-                        if nameData['prevTime'][nameData.index[0]] + 1 > sched['Start'][i]:
+                        if nameData['prevTime'][nameData.index[0]] + 100 > sched['Start'][i]:
                             index = (index + 1) % numStaff
                             continue
 
@@ -130,26 +143,31 @@ def createGrid(sched, staff):
                         if ss.kcrew[name][days[day]] == "AM'er" and sched["Start"][i] < 1300:
                             index = (index + 1) % numStaff
                             continue
-                        elif ss.kcrew[name][days[day]] == "Aftie" and ((sched["Start"] > 1300 and sched["Start"] < 1830) or (sched["End"] > 1300 and sched["End"] < 1830)):
+                        elif ss.kcrew[name][days[day]] == "Aftie" and ((sched["Start"][i] > 1300 and sched["Start"][i] < 1830) or (sched["End"][i] > 1300 and sched["End"][i] < 1830)):
                             index = (index + 1) % numStaff
                             continue
                             
+                    # Check if they have BStud durring this time (assuming Bstud is 1 hour)
+                    if days[day] == ss.roster[name]["Bstud_day"]:
+                        if (ss.roster[name]["Bstud_time"]+100 > sched["End"][i] - 15) and (ss.roster[name]["Bstud_time"] < sched["End"][i] + 15):
+                            index = (index + 1) % numStaff
+                            continue
+                        if (ss.roster[name]["Bstud_time"]+100 > sched["Start"][i] - 15) and (ss.roster[name]["Bstud_time"] < sched["Start"][i] + 15):
+                            index = (index + 1) % numStaff
+                            continue
+                        
 
                     # Check if they have a 1on1
                     if ss.roster[name]["OneOnOne"]:
                         index = (index + 1) % numStaff
                         continue
 
-                    # Check if they meet the requirements
-                    req = sched['Require'][i].split(',')
-                    for w in range(len(req)):
-                        req[w] = req[w].strip()
 
                     # Check if leadership can be skipped
                     if ("Leadership" not in req) and ss.roster[name]["Role"] == "Leadership":
                         index = (index + 1) % numStaff
                         continue
-                    
+                    # Check if they meet the requirements
                     metReq = True
                     for crit in req:
                         # Must check the roster dict to see if they are workcrew
@@ -172,13 +190,7 @@ def createGrid(sched, staff):
                         index = (index + 1) % numStaff
                         continue
 
-                    # Check if they have any tags that make them ineligable
-                    # Still need to check sound/projects and media
-                    if "Leadership" not in req or ss.roster[name]["Role"] not in ["Impact", "Crew", "Cove"]:
-                        tag = nameData["Tag"][nameData.index[0]].strip()
-                        if tag in ["Health Assistant", "Head Lifeguard", "Camp Store"]:
-                            index = (index + 1) % numStaff
-                            continue
+    
                             
 
 
@@ -191,7 +203,7 @@ def createGrid(sched, staff):
 
                 # add staff to list and update their recent time attributes 
                 else:
-                    dayList.append(name + " " + str(ss.roster[name]["Role"]) + " Lifeguard:" + str(nameData["Lifeguard"][nameData.index[0]]) + " Ropes:" + str(nameData["Ropes"][nameData.index[0]]))
+                    dayList.append(name)
                     staff.loc[nameData.index[0], 'prevDay'] = day
                     staff.loc[nameData.index[0], 'prevTime'] = sched['End'][i]
 
