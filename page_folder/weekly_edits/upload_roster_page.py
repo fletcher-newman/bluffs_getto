@@ -68,7 +68,7 @@ with col1:
             if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
-                st.write(name)
+                st.write(f"{name} {ss.roster[name]["Bstud_day"]} {ss.roster[name]["Bstud_time"]}") # ***TEST
 
 with col2:
     st.markdown("**Current Crew**")
@@ -77,7 +77,7 @@ with col2:
             if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
-                st.write(name)
+                st.write(f"{name} {ss.roster[name]["Bstud_day"]} {ss.roster[name]["Bstud_time"]}") # ***TEST
 
 with col3:
     st.markdown("**Current Cove**")
@@ -86,7 +86,7 @@ with col3:
             if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
-                st.write(name)
+                st.write(f"{name} {ss.roster[name]["Bstud_day"]} {ss.roster[name]["Bstud_time"]}") # ***TEST
                 
 with col4:
     st.markdown("**Current Workcrew**")
@@ -95,7 +95,7 @@ with col4:
             if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
-                st.write(name)
+                st.write(f"{name} {ss.roster[name]["Bstud_day"]} {ss.roster[name]["Bstud_time"]}") # ***TEST
                 
 with col5:
     st.markdown("**Current K-Crew**")
@@ -104,9 +104,9 @@ with col5:
             if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
-                st.write(name)
+                st.write(f"{name} {ss.roster[name]["Bstud_day"]} {ss.roster[name]["Bstud_time"]}") # ***TEST
 
 st.markdown("**Current Leadership**")
 for name in ss.roster:
     if ss.roster[name]["Role"] == "Leadership":
-        st.write(name)
+        st.write(f"{name} {ss.roster[name]["Bstud_day"]} {ss.roster[name]["Bstud_time"]}") # ***TEST

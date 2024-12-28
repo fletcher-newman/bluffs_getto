@@ -31,6 +31,11 @@ if 'roster' not in ss:
     # Roster is a nested dictionary:
     # {CampName: {"role": name of role, "OneOnOne": T/F, "bstud_day": "Monday/Tuesday/etc.", "bstud_time": time of bstud (int)}
     # Go ahead and put in leadership
+    ss.roster = {}
+    # Initialize bstud (dependent on roster existing and adding leadership to roster is dependent on bstud existing)
+    if "bstud" not in ss:
+        bstud = pd.read_excel('permanent_data/bstud_list.xlsx')
+        ss.bstud = bstud
     leadership_df = ss.staff[ss.staff["Tag"] == "Leadership"]
     for _, row in leadership_df.iterrows():
         day, time = find_bstud(row["Camp_name"])
@@ -40,9 +45,6 @@ if 'kcrew' not in ss:
     # kcrew is nested dict with campname as outer key and day as inner key and what their assignment was (am'er, afttie, wickie, o'fer) for that day
     # Only one assignment per person per day
     ss.kcrew = {}
-if "bstud" not in ss:
-    bstud = pd.read_excel('permanent_data/bstud_list.xlsx')
-    ss.bstud = bstud
 
 def info_page():
     st.title("How to use the get-to grid creator")
@@ -70,6 +72,7 @@ pages = {
         st.Page('page_folder/sched_page.py', title="Edit Grid Schedule"),
         st.Page('page_folder/staff_page.py', title="Edit Staff List"),
         st.Page("page_folder/editGrid_page.py", title="Edit Grid"),
+        st.Page("page_folder/bstud_page.py", title="Edit Bible Study List")
     ],
     'Get To Grid Creator': [
         st.Page("page_folder/createGrid_page.py", title="Create Grid")

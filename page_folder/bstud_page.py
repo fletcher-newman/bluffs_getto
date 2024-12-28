@@ -3,6 +3,9 @@ from streamlit import session_state as ss
 import pandas as pd
 from function_def import find_bstud
 
+st.title("Current Bible Study List")
+st.dataframe(ss.bstud)
+
 st.title("Upload Bible Study List")
 st.write("**Highly** suggest downloading a sample format and modifying it to your specifications.")
 st.page_link("page_folder/formats_page.py", label="**Example formatts can be downloaded in the formatts section** (link)")
