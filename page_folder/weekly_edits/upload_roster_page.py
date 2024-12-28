@@ -2,17 +2,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from streamlit import session_state as ss
-from function_def import find_bstud
-
-def trans_data(roster, program):
-    for name in roster[program]:
-        if name == "":
-            continue
-        elif name not in list(ss.staff["Camp_name"]):
-            st.error(f"{name} is not in the staff directory.")
-        else:
-            day, time = find_bstud(name)
-            ss.roster[name] = {"Role": program, "OneOnOne": False, "Bstud_day": day, "Bstud_time": time}
+from function_def import find_bstud, trans_data
 
 st.title("Upload Roster")
 st.write("Set the staff roster for the week")
@@ -38,6 +28,8 @@ if roster_file is not None and st.button("Submit File"):
     programs = ["Impact", "Crew", "Cove", "Workcrew", "P-Staff"]
     for prog in programs:
         trans_data(roster, prog)
+    # Save in long term memory 
+    roster.to_excel('permanent_data/roster.xlsx', index=False)
     st.success("File successfuly submitted")
 
 
@@ -57,6 +49,9 @@ if st.button("Save One on One"):
             st.error(f"{name} is not listed in this weeks roster")
             continue
         ss.roster[name]["OneOnOne"] = True
+    # Save in long term memory 
+    ss.ooo["Camp_name"] = oneonone
+    ss.ooo.to_excel('permanent_data/OneOnOne.xlsx', index=False)
 
 
 col1, col2, col3, col4, col5 = st.columns(5)
@@ -68,7 +63,7 @@ with col1:
             if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
-                st.write(f"{name} {ss.roster[name]["Bstud_day"]} {ss.roster[name]["Bstud_time"]}") # ***TEST
+                st.write(name)
 
 with col2:
     st.markdown("**Current Crew**")
@@ -77,7 +72,7 @@ with col2:
             if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
-                st.write(f"{name} {ss.roster[name]["Bstud_day"]} {ss.roster[name]["Bstud_time"]}") # ***TEST
+                st.write(name)
 
 with col3:
     st.markdown("**Current Cove**")
@@ -86,7 +81,7 @@ with col3:
             if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
-                st.write(f"{name} {ss.roster[name]["Bstud_day"]} {ss.roster[name]["Bstud_time"]}") # ***TEST
+                st.write(name)
                 
 with col4:
     st.markdown("**Current Workcrew**")
@@ -95,7 +90,7 @@ with col4:
             if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
-                st.write(f"{name} {ss.roster[name]["Bstud_day"]} {ss.roster[name]["Bstud_time"]}") # ***TEST
+                st.write(name)
                 
 with col5:
     st.markdown("**Current K-Crew**")
@@ -104,9 +99,9 @@ with col5:
             if ss.roster[name]["OneOnOne"]:
                 st.write(name, " (1on1)")
             else: 
-                st.write(f"{name} {ss.roster[name]["Bstud_day"]} {ss.roster[name]["Bstud_time"]}") # ***TEST
+                st.write(name)
 
 st.markdown("**Current Leadership**")
 for name in ss.roster:
     if ss.roster[name]["Role"] == "Leadership":
-        st.write(f"{name} {ss.roster[name]["Bstud_day"]} {ss.roster[name]["Bstud_time"]}") # ***TEST
+        st.write(name)

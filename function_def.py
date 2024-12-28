@@ -127,10 +127,10 @@ def createGrid(sched, staff):
                     # ASSUMING AM'ER: 600-1200 (6am-12pm), AFTIE: 1330-1800 (1:30pm-6:00pm)
                     if name in ss.kcrew and day != 0:
                         # Check morning 
-                        if ss.kcrew[name] == "AM'er" and sched["Start"][i] < 1300:
+                        if ss.kcrew[name][days[day]] == "AM'er" and sched["Start"][i] < 1300:
                             index = (index + 1) % numStaff
                             continue
-                        elif ss.kcrew[name] == "Aftie" and ((sched["Start"] > 1300 and sched["Start"] < 1830) or (sched["End"] > 1300 and sched["End"] < 1830)):
+                        elif ss.kcrew[name][days[day]] == "Aftie" and ((sched["Start"] > 1300 and sched["Start"] < 1830) or (sched["End"] > 1300 and sched["End"] < 1830)):
                             index = (index + 1) % numStaff
                             continue
                             
@@ -238,3 +238,17 @@ def find_bstud(camp_name):
             day = splt[0].strip()
             time = int(splt[1].strip())
     return day, time
+
+
+def trans_data(roster, program):
+    for name in roster[program]:
+        if name == "":
+            continue
+        elif name not in list(ss.staff["Camp_name"]):
+            st.error(f"{name} is not in the staff directory.")
+        else:
+            day, time = find_bstud(name)
+            ooo = False
+            if name in list(ss.ooo["Camp_name"]):
+                ooo = True
+            ss.roster[name] = {"Role": program, "OneOnOne": ooo, "Bstud_day": day, "Bstud_time": time}
